@@ -1,35 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import syndesysLogo from "./assets/Syndesys.png";
+import "./index.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <main className="flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white">
+      {/* Centered Syndesys Logo */}
+      <img
+        src={syndesysLogo}
+        alt="Syndesys Logo"
+        className="w-80 md:w-[28rem] h-auto drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+      />
+
+      {/* Footer pinned at bottom */}
+      <footer className="absolute bottom-4 text-slate-500 text-sm">
+        © {new Date().getFullYear()} Syndesys · All Rights Reserved
+      </footer>
+    </main>
+  );
 }
 
-export default App
+export default App;
