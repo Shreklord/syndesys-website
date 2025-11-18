@@ -1,25 +1,87 @@
-import { useState } from "react";
-import syndesysLogo from "./assets/Syndesys.png";
+// src/App.tsx
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { ScrollToTop } from "./components/ScrollToTop";
+
+import { useEffect, useState } from "react";
 import "./index.css";
 
-function App() {
-  const [count, setCount] = useState(0);
+import { navItems, services } from "./data/siteContent";
+import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
+
+import { HomePage } from "./pages/HomePage";
+import { ServicesPage } from "./pages/ServicesPage";
+import { ServiceDetailPage } from "./pages/ServiceDetailPage";
+
+function AppShell() {
+  const [activeId, setActiveId] = useState<string>("home");
+  const location = useLocation();
+
+  // Set active nav based on route
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setActiveId("home");
+    } else if (location.pathname.startsWith("/services")) {
+      setActiveId("services");
+    } else {
+      setActiveId("home");
+    }
+  }, [location.pathname]);
+
+  // 🔥 Scroll to sections on the home page when hash changes (/#about, /#contact)
+  useEffect(() => {
+    if (location.pathname !== "/") return;
+
+    const hash = location.hash;
+
+    if (!hash) {
+      // No hash → optional: scroll to top when just going to "/"
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const id = hash.replace("#", "");
+    const el = document.getElementById(id);
+
+    if (el) {
+      // Offset for fixed navbar (~100px)
+      const y = el.getBoundingClientRect().top + window.scrollY - 100;
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth",
+      });
+    }
+  }, [location.pathname, location.hash]);
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white">
-      {/* Centered Syndesys Logo */}
-      <img
-        src={syndesysLogo}
-        alt="Syndesys Logo"
-        className="w-80 md:w-[28rem] h-auto drop-shadow-2xl hover:scale-105 transition-transform duration-500"
-      />
+    <div className="flex flex-col min-h-screen w-full bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white">
+      <Navbar activeId={activeId} navItems={navItems} services={services} />
 
-      {/* Footer pinned at bottom */}
-      <footer className="absolute bottom-4 text-slate-500 text-sm">
-        © {new Date().getFullYear()} Syndesys · All Rights Reserved
-      </footer>
-    </main>
+      <main className="flex-grow pt-28">
+        <Routes>
+          <Route path="/" element={<HomePage services={services} />} />
+          <Route
+            path="/services"
+            element={<ServicesPage services={services} />}
+          />
+          <Route
+            path="/services/:slug"
+            element={<ServiceDetailPage services={services} />}
+          />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <AppShell />
+    </BrowserRouter>
+  );
+}

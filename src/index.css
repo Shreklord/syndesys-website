@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Smooth scrolling for in-page links */
+html {
+  scroll-behavior: smooth;
+}
+
 /* --- Full-height fix --- */
 html,
 body,
