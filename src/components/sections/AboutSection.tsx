@@ -1,7 +1,18 @@
-// src/components/sections/AboutSection.tsx
+import { useFadeInOnScroll } from "../../hooks/fadeInOnScroll";
+
 export function AboutSection() {
+  const { ref, visible } = useFadeInOnScroll();
+
   return (
-    <section id="about" className="mx-auto max-w-5xl px-4 py-24 scroll-mt-28">
+    <section
+      id="about"
+      ref={ref}
+      className={`
+        mx-auto max-w-5xl px-4 py-24 scroll-mt-28
+        transition-all duration-700 ease-out
+        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
+      `}
+    >
       {/* Section Header */}
       <div className="mb-10">
         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300 mb-2">

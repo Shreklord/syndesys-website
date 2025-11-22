@@ -11,10 +11,12 @@ interface NavbarProps {
 }
 
 export function Navbar({ activeId, navItems, services }: NavbarProps) {
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false); // desktop dropdown
+  const [mobileOpen, setMobileOpen] = useState(false); // mobile menu
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false); // mobile Services sub-menu
   const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const openMenu = () => {
+  const openDesktopServices = () => {
     if (closeTimeout.current) {
       clearTimeout(closeTimeout.current);
       closeTimeout.current = null;
@@ -22,7 +24,7 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
     setServicesOpen(true);
   };
 
-  const closeMenu = () => {
+  const closeDesktopServices = () => {
     closeTimeout.current = setTimeout(() => {
       setServicesOpen(false);
     }, 500);
@@ -30,19 +32,21 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur shadow-lg">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        {/* Logo + Name */}
-        <div className="flex items-center gap-4">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
+        {/* Logo */}
+        <div className="flex items-center gap-3">
           <img
             src={syndesysLogo}
             alt="Syndesys Logo"
-            className="h-16 w-auto drop-shadow-xl transition-transform duration-300 hover:scale-105 hover:-translate-y-0.5"
+            className="h-10 w-auto sm:h-12 md:h-16 drop-shadow-xl transition-transform duration-300 hover:scale-105 hover:-translate-y-0.5"
           />
-          <span className="text-2xl font-semibold tracking-[0.18em] uppercase text-slate-100"></span>
+          <span className="hidden sm:inline text-xl sm:text-2xl font-semibold tracking-[0.18em] uppercase text-slate-100">
+            {/* Optional text next to logo */}
+          </span>
         </div>
 
-        {/* Nav */}
-        <ul className="flex gap-8 text-sm md:text-base font-medium text-slate-200">
+        {/* Desktop Nav */}
+        <ul className="hidden md:flex gap-8 text-sm md:text-base font-medium text-slate-200">
           {navItems.map((item) => {
             const isActive = activeId === item.id;
 
@@ -51,8 +55,8 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
                 <li
                   key={item.id}
                   className="relative"
-                  onMouseEnter={openMenu}
-                  onMouseLeave={closeMenu}
+                  onMouseEnter={openDesktopServices}
+                  onMouseLeave={closeDesktopServices}
                 >
                   <Link
                     to="/services"
@@ -75,6 +79,7 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
                     <span className="text-xs">▾</span>
                   </Link>
 
+                  {/* Desktop dropdown */}
                   <div
                     className={`absolute right-0 mt-2 min-w-[260px] rounded-xl border border-slate-800 bg-slate-950/95 shadow-xl
                       ${
@@ -83,8 +88,8 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
                           : "opacity-0 pointer-events-none"
                       }
                       transition-opacity duration-200`}
-                    onMouseEnter={openMenu}
-                    onMouseLeave={closeMenu}
+                    onMouseEnter={openDesktopServices}
+                    onMouseLeave={closeDesktopServices}
                   >
                     <div className="py-2">
                       <Link
@@ -136,7 +141,87 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
             );
           })}
         </ul>
+
+        {/* Mobile hamburger button */}
+        <button
+          type="button"
+          className="md:hidden inline-flex items-center justify-center rounded-md border border-slate-700 px-2.5 py-2 text-slate-200 hover:bg-slate-800 transition"
+          onClick={() => setMobileOpen((prev) => !prev)}
+          aria-label="Toggle navigation"
+        >
+          {/* Simple hamburger icon */}
+          <span className="sr-only">Open main menu</span>
+          <div className="space-y-1.5">
+            <span className="block h-0.5 w-5 bg-slate-200" />
+            <span className="block h-0.5 w-5 bg-slate-200" />
+            <span className="block h-0.5 w-5 bg-slate-200" />
+          </div>
+        </button>
       </nav>
+
+      {/* Mobile menu panel */}
+      {mobileOpen && (
+        <div className="md:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-sm">
+          <div className="mx-auto max-w-7xl px-4 py-4 space-y-2 text-sm font-medium text-slate-200">
+            {navItems.map((item) => {
+              if (item.id === "services") {
+                return (
+                  <div key={item.id} className="border-b border-slate-800 pb-2">
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between py-2 text-left hover:text-cyan-400"
+                      onClick={() =>
+                        setMobileServicesOpen((prev) => !prev)
+                      }
+                    >
+                      <span>Services</span>
+                      <span className="text-xs">
+                        {mobileServicesOpen ? "▴" : "▾"}
+                      </span>
+                    </button>
+
+                    {mobileServicesOpen && (
+                      <div className="mt-1 pl-3 space-y-1">
+                        <Link
+                          to="/services"
+                          className="block py-1 text-slate-300 hover:text-cyan-400"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          All Services
+                        </Link>
+                        {services.map((svc) => (
+                          <Link
+                            key={svc.id}
+                            to={`/services/${svc.slug}`}
+                            className="block py-1 text-slate-300 hover:text-cyan-400"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            {svc.title}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              const to = item.id === "home" ? "/" : `/#${item.id}`;
+
+              return (
+                <div key={item.id} className="border-b border-slate-800 last:border-b-0">
+                  <Link
+                    to={to}
+                    className="block py-2 hover:text-cyan-400"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
