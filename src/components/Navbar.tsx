@@ -9,7 +9,7 @@ interface NavbarProps {
   services: Service[];
 }
 
-export function Navbar({ activeId, navItems, services }: NavbarProps) {
+export function Navbar({ navItems, services }: NavbarProps) {
   const [servicesOpen, setServicesOpen] = useState(false); // desktop dropdown
   const [mobileOpen, setMobileOpen] = useState(false); // mobile menu
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false); // mobile Services sub-menu
