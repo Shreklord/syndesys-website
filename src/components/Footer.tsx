@@ -49,12 +49,17 @@ export function Footer() {
         <div>
           <h3 className="text-lg font-semibold mb-3">Social</h3>
           <div className="flex gap-4">
+
+            {/* 🔵 UPDATED LINKEDIN */}
             <a
-              href="#"
+              href="https://www.linkedin.com/in/jason-henry-9273242/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-2 rounded-full bg-slate-800 hover:bg-cyan-600 transition flex items-center justify-center"
             >
               <FaLinkedinIn size={18} />
             </a>
+
             <a
               href="#"
               className="p-2 rounded-full bg-slate-800 hover:bg-cyan-600 transition flex items-center justify-center"
