@@ -1,28 +1,6 @@
 import { useState } from "react";
 
 export function ContactSection() {
-  const [name, setName] = useState("");
-  const [senderEmail, setSenderEmail] = useState("");
-  const [service, setService] = useState("Network Consulting");
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const mailto = `mailto:info@syndesys.com?subject=${encodeURIComponent(
-      `New Inquiry from ${name}`
-    )}&body=${encodeURIComponent(
-      `Name: ${name}
-Email: ${senderEmail}
-Service Interested In: ${service}
-
-Message:
-${message}`
-    )}`;
-
-    window.location.href = mailto;
-  };
-
   return (
     <section id="contact" className="mx-auto max-w-3xl px-4 py-24 scroll-mt-28">
       <h2 className="text-2xl md:text-3xl font-semibold mb-3">Contact</h2>
@@ -46,7 +24,23 @@ ${message}`
       >
         <h4 className="text-lg font-semibold mb-4 text-cyan-300">Say Hello!</h4>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        {/* FormSubmit form */}
+        <form
+          action="https://formsubmit.co/info@syndesys.com"
+          method="POST"
+          className="space-y-5"
+        >
+          {/* FormSubmit hidden controls */}
+          <input
+            type="hidden"
+            name="_subject"
+            value="New Inquiry from Syndesys Website"
+          />
+          <input type="hidden" name="_template" value="box" />
+          <input type="hidden" name="_captcha" value="false" />
+          {/* Optional: redirect after submit */}
+          {/* <input type="hidden" name="_next" value="https://syndesys.com/thank-you" /> */}
+
           {/* Name */}
           <div>
             <label className="block text-sm mb-1 text-slate-300">
@@ -54,9 +48,8 @@ ${message}`
             </label>
             <input
               type="text"
+              name="name"
               required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
               placeholder="John Doe"
               className="w-full rounded-lg bg-slate-950 border border-slate-700 px-4 py-2.5
                          text-sm text-slate-200 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
@@ -71,9 +64,8 @@ ${message}`
             </label>
             <input
               type="email"
+              name="email"
               required
-              value={senderEmail}
-              onChange={(e) => setSenderEmail(e.target.value)}
               placeholder="you@example.com"
               className="w-full rounded-lg bg-slate-950 border border-slate-700 px-4 py-2.5
                          text-sm text-slate-200 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
@@ -87,8 +79,8 @@ ${message}`
               Choose Services
             </label>
             <select
-              value={service}
-              onChange={(e) => setService(e.target.value)}
+              name="service"
+              defaultValue="Network Consulting"
               className="w-full rounded-lg bg-slate-950 border border-slate-700 px-4 py-2.5
                          text-sm text-slate-200 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
                          outline-none transition"
@@ -108,9 +100,8 @@ ${message}`
               Your message (optional)
             </label>
             <textarea
+              name="message"
               rows={4}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
               placeholder="Tell us more if you'd like..."
               className="w-full rounded-lg bg-slate-950 border border-slate-700 px-4 py-2.5
                          text-sm text-slate-200 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
@@ -134,3 +125,4 @@ ${message}`
     </section>
   );
 }
+

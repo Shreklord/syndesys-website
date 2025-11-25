@@ -13,3 +13,60 @@ body,
   margin: 0;
 }
 
+.circuit-line path {
+  /* So the path can be animated like it's being drawn */
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation: circuit-draw 3.2s ease-out infinite;
+}
+
+.circuit-line circle {
+  opacity: 0;
+  transform-origin: center;
+  animation: circuit-glow 3.2s ease-out infinite;
+}
+
+/* Offset the left/right so they don't fire at the same time */
+.circuit-line-right path,
+.circuit-line-right circle {
+  animation-delay: 0.2s;
+}
+
+.circuit-line-left path,
+.circuit-line-left circle {
+  animation-delay: 1s;
+}
+
+@keyframes circuit-draw {
+  0% {
+    stroke-dashoffset: 260;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  60% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes circuit-glow {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+

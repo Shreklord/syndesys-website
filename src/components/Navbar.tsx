@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import syndesysLogo from "../assets/Syndesys.svg";
 import type { NavItem, Service } from "../data/siteContent";
 
 interface NavbarProps {
-  activeId: string;
+  activeId: string; // no longer really needed, but kept for now
   navItems: NavItem[];
   services: Service[];
 }
@@ -14,6 +14,9 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false); // mobile menu
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false); // mobile Services sub-menu
   const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const location = useLocation();
+  const { pathname, hash } = location;
 
   const openDesktopServices = () => {
     if (closeTimeout.current) {
@@ -29,6 +32,20 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
     }, 500);
   };
 
+  // Helper: compute active state from URL
+  const isItemActive = (id: string) => {
+    if (id === "home") {
+      // Active on root with no hash or #home
+      return pathname === "/" && (hash === "" || hash === "#home");
+    }
+    if (id === "services") {
+      // Any /services route
+      return pathname.startsWith("/services");
+    }
+    // Other sections (about, contact, etc.) based on hash
+    return hash === `#${id}`;
+  };
+
   return (
     <header
       className="
@@ -41,11 +58,12 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="relative rounded-xl border border-[#F69220]/70 bg-slate-950/90 p-1.5 shadow-[0_0_18px_rgba(246,146,32,0.35)]">
+          {/* Clean logo, no glow box */}
+          <div className="relative bg-slate-950/90 p-1.5 rounded-xl">
             <img
               src={syndesysLogo}
               alt="Syndesys Logo"
-              className="h-10 w-auto sm:h-12 md:h-16 drop-shadow-xl transition-transform duration-300 hover:scale-105 hover:-translate-y-0.5"
+              className="h-10 w-auto sm:h-12 md:h-16 transition-transform duration-300 hover:scale-105 hover:-translate-y-0.5"
             />
           </div>
           <span className="hidden sm:inline text-xl sm:text-2xl font-semibold tracking-[0.18em] uppercase text-slate-100">
@@ -56,7 +74,7 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
         {/* Desktop Nav */}
         <ul className="hidden md:flex gap-8 text-sm md:text-base font-medium text-slate-200">
           {navItems.map((item) => {
-            const isActive = activeId === item.id;
+            const isActive = isItemActive(item.id);
 
             if (item.id === "services") {
               return (
@@ -243,6 +261,7 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
               }
 
               const to = item.id === "home" ? "/" : `/#${item.id}`;
+              const isActive = isItemActive(item.id);
 
               return (
                 <div
@@ -251,7 +270,11 @@ export function Navbar({ activeId, navItems, services }: NavbarProps) {
                 >
                   <Link
                     to={to}
-                    className="block py-2 hover:text-[#F69220]"
+                    className={`
+                      block py-2
+                      ${isActive ? "text-[#F69220]" : "text-slate-200"}
+                      hover:text-[#F69220]
+                    `}
                     onClick={() => setMobileOpen(false)}
                   >
                     {item.label}

@@ -27,6 +27,59 @@ function useFadeInOnScroll() {
   return { ref, visible };
 }
 
+// 🔵 Circuit-style animated lines under the logo
+function CircuitLines() {
+  return (
+    <svg
+      className="pointer-events-none absolute inset-0"
+      viewBox="-180 -60 360 120"
+    >
+      <defs>
+        {/* Gradient that fades from bright cyan to transparent */}
+        <linearGradient id="circuit-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
+          <stop offset="0%" stopColor="#22d3ee" stopOpacity="1" />
+          <stop offset="60%" stopColor="#22d3ee" stopOpacity="0.5" />
+          <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
+        </linearGradient>
+        <filter id="circuit-glow">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values="0 0 0 0 0.13  0 0 0 0 0.83  0 0 0 0 0.93  0 0 0 0.9 0"
+          />
+        </filter>
+      </defs>
+
+      {/* Right side trace */}
+      <g className="circuit-line circuit-line-right">
+        <path
+          d="M 0 0 H 80 V -30 H 150"
+          stroke="url(#circuit-gradient)"
+          strokeWidth={2}
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="150" cy="-30" r="5" fill="#22d3ee" filter="url(#circuit-glow)" />
+      </g>
+
+      {/* Left side trace */}
+      <g className="circuit-line circuit-line-left">
+        <path
+          d="M 0 0 H -80 V 30 H -160"
+          stroke="url(#circuit-gradient)"
+          strokeWidth={2}
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="-160" cy="30" r="5" fill="#22d3ee" filter="url(#circuit-glow)" />
+      </g>
+    </svg>
+  );
+}
+
 export function HomeSection() {
   const { ref, visible } = useFadeInOnScroll();
 
@@ -43,7 +96,7 @@ export function HomeSection() {
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
         `}
       >
-        {/* Logo — Bigger + Blue Glow + Slower Fade */}
+        {/* Logo */}
         <div
           className={`
             transition-all duration-[2500ms] ease-out
@@ -52,8 +105,8 @@ export function HomeSection() {
           style={{ transitionDelay: visible ? "200ms" : "0ms" }}
         >
           <div className="relative mx-auto mb-2">
-            {/* Blue glow */}
             <div className="absolute -inset-12 rounded-full bg-cyan-500/25 blur-[85px]" />
+            <CircuitLines />
 
             <img
               src={syndesysLogo}
@@ -88,9 +141,7 @@ export function HomeSection() {
         >
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-100">
             Fully managed solutions for{" "}
-            <span className="text-cyan-300">
-              seamless customer experiences.
-            </span>
+            <span className="text-cyan-300">seamless customer experiences.</span>
           </h1>
         </div>
 
@@ -127,58 +178,42 @@ export function HomeSection() {
           `}
           style={{ transitionDelay: visible ? "800ms" : "0ms" }}
         >
+          {/* READ MORE */}
           <a
             href="#about"
             className="inline-flex items-center rounded-full border border-slate-600 px-6 py-2 
               text-sm font-medium text-slate-200 
-              hover:border-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/10
+              hover:border-[#F69220] hover:text-[#F69220] hover:bg-[#F69220]/10
               transition-all duration-300 hover:-translate-y-0.5"
           >
             Read More
           </a>
 
+          {/* OUR SERVICES */}
           <a
             href="#services"
-            className="inline-flex items-center rounded-full border border-cyan-400 px-6 py-2 
-              text-sm font-medium text-cyan-300 
-              hover:bg-cyan-400/10 hover:text-cyan-200
-              transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(34,211,238,0.35)]"
+            className="inline-flex items-center rounded-full border border-[#F69220] px-6 py-2 
+              text-sm font-medium text-[#F69220]
+              hover:bg-[#F69220]/10 hover:text-[#F69220]
+              transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(246,146,32,0.35)]"
           >
             Our Services
           </a>
+
+          {/* CONTACT US – cyan version */}
+          <a
+            href="#contact"
+            className="inline-flex items-center rounded-full border border-cyan-400 px-6 py-2 
+              text-sm font-medium text-cyan-300
+              hover:bg-cyan-400/10 hover:text-cyan-300
+              transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(34,211,238,0.35)]"
+          >
+            Contact Us
+          </a>
         </div>
 
-        {/* CTA Box */}
-        <div
-          className={`
-            w-full
-            transition-all duration-[900ms] ease-out
-            ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
-          `}
-          style={{ transitionDelay: visible ? "950ms" : "0ms" }}
-        >
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 flex flex-col items-center gap-4 text-center">
-            <h3 className="text-lg font-semibold text-cyan-300">
-              Let&apos;s talk about your project
-            </h3>
-            <p className="text-sm text-slate-300 max-w-md">
-              Tell us where you are in your network and automation journey...
-            </p>
-
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center
-                rounded-full border border-cyan-400
-                px-8 py-2.5 min-w-[150px]
-                text-sm font-medium text-cyan-300
-                hover:bg-cyan-400/10 hover:text-cyan-200
-                transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Contact Us
-            </a>
-          </div>
-        </div>
-
+        
+      
       </div>
     </section>
   );
