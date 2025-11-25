@@ -107,7 +107,6 @@ export function HomeSection() {
           <div className="relative mx-auto mb-2">
             <div className="absolute -inset-12 rounded-full bg-cyan-500/25 blur-[85px]" />
             <CircuitLines />
-
             <img
               src={syndesysLogo}
               alt="Syndesys Logo"
@@ -211,9 +210,6 @@ export function HomeSection() {
             Contact Us
           </a>
         </div>
-
-        
-      
       </div>
     </section>
   );

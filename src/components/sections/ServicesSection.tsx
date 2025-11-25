@@ -38,7 +38,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
             key={svc.id}
             className={`
               rounded-2xl border border-slate-800 bg-slate-900/60 p-5
-              flex flex-col justify-between
+              flex flex-col
               transition-all duration-500 ease-out
               hover:-translate-y-2 hover:border-cyan-500/60 hover:bg-slate-900
               ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
@@ -47,11 +47,22 @@ export function ServicesSection({ services }: ServicesSectionProps) {
               transitionDelay: visible ? `${index * 120}ms` : "0ms",
             }}
           >
-            <div>
+            {/* 🔵 IMAGE AT THE TOP */}
+            <div className="w-full mb-4">
+              <img
+                src={svc.image}
+                alt={svc.title}
+                className="w-full h-40 object-cover rounded-xl shadow-md hover:scale-[1.02] transition-transform duration-300"
+              />
+            </div>
+
+            {/* TEXT CONTENT */}
+            <div className="flex flex-col flex-grow">
               <h3 className="mb-2 text-lg font-semibold">{svc.title}</h3>
               <p className="text-sm text-slate-300">{svc.description}</p>
             </div>
 
+            {/* Read More button */}
             <Link
               to={`/services/${svc.slug}`}
               className="mt-4 inline-flex items-center text-sm font-medium text-cyan-300 hover:text-cyan-200 transition-colors"
