@@ -1,5 +1,10 @@
 // src/App.tsx
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { ScrollToTop } from "./components/ScrollToTop";
 
 import { useEffect, useState } from "react";
@@ -12,8 +17,17 @@ import { Footer } from "./components/Footer";
 import { HomePage } from "./pages/HomePage";
 import { ServicesPage } from "./pages/ServicesPage";
 import { ServiceDetailPage } from "./pages/ServiceDetailPage";
-import { ServiceInquiryPage } from "./pages/ServiceInquiryPage";   // ✅ NEW
-import { ThankYouPage } from "./pages/ThankYouPage";               // ✅ ALREADY ADDED
+import { ServiceInquiryPage } from "./pages/ServiceInquiryPage";
+import { ThankYouPage } from "./pages/ThankYouPage";
+
+// ✅ New public pages
+import { BlogPage } from "./pages/BlogPage";
+import { CareersPage } from "./pages/CareersPage";
+
+// 🔐 Admin imports
+import { AdminLoginPage } from "./pages/AdminLoginPage";
+import { AdminDashboardPage } from "./pages/AdminDashboardPage";
+import { RequireAdmin } from "./components/RequireAdmin";
 
 function AppShell() {
   const [activeId, setActiveId] = useState<string>("home");
@@ -25,6 +39,10 @@ function AppShell() {
       setActiveId("home");
     } else if (location.pathname.startsWith("/services")) {
       setActiveId("services");
+    } else if (location.pathname.startsWith("/blog")) {
+      setActiveId("blog");
+    } else if (location.pathname.startsWith("/careers")) {
+      setActiveId("careers");
     } else if (location.pathname.startsWith("/thank-you")) {
       setActiveId(""); // nothing highlighted
     } else {
@@ -58,23 +76,42 @@ function AppShell() {
 
       <main className="flex-grow pt-28">
         <Routes>
+          {/* Public site */}
           <Route path="/" element={<HomePage services={services} />} />
 
-          <Route path="/services" element={<ServicesPage services={services} />} />
+          <Route
+            path="/services"
+            element={<ServicesPage services={services} />}
+          />
 
           <Route
             path="/services/:slug"
             element={<ServiceDetailPage services={services} />}
           />
 
-          {/* 🔥 The new inquiry form page */}
           <Route
             path="/services/:slug/inquiry"
             element={<ServiceInquiryPage services={services} />}
           />
 
-          {/* 🔥 Dedicated thank-you page */}
+          {/* ✅ New public pages */}
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+
           <Route path="/thank-you" element={<ThankYouPage />} />
+
+          {/* 🔐 Admin auth routes */}
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+
+          {/* 🔐 Protected admin area */}
+          <Route
+            path="/admin"
+            element={
+              <RequireAdmin>
+                <AdminDashboardPage />
+              </RequireAdmin>
+            }
+          />
         </Routes>
       </main>
 

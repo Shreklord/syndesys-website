@@ -1,10 +1,11 @@
+// src/components/Navbar.tsx
 import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import syndesysLogo from "../assets/Syndesys.svg";
 import type { NavItem, Service } from "../data/siteContent";
 
 interface NavbarProps {
-  activeId: string; // no longer really needed, but kept for now
+  activeId: string; // currently not used directly, but kept for future use
   navItems: NavItem[];
   services: Service[];
 }
@@ -42,8 +43,23 @@ export function Navbar({ navItems, services }: NavbarProps) {
       // Any /services route
       return pathname.startsWith("/services");
     }
+    if (id === "blog") {
+      return pathname.startsWith("/blog");
+    }
+    if (id === "careers") {
+      return pathname.startsWith("/careers");
+    }
     // Other sections (about, contact, etc.) based on hash
     return hash === `#${id}`;
+  };
+
+  // Helper: compute link target
+  const getTo = (id: string) => {
+    if (id === "home") return "/";
+    if (id === "blog") return "/blog";
+    if (id === "careers") return "/careers";
+    if (id === "services") return "/services"; // used only for "All Services" link in dropdown
+    return `/#${id}`;
   };
 
   return (
@@ -58,7 +74,6 @@ export function Navbar({ navItems, services }: NavbarProps) {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          {/* Clean logo, no glow box */}
           <div className="relative bg-slate-950/90 p-1.5 rounded-xl">
             <img
               src={syndesysLogo}
@@ -67,7 +82,7 @@ export function Navbar({ navItems, services }: NavbarProps) {
             />
           </div>
           <span className="hidden sm:inline text-xl sm:text-2xl font-semibold tracking-[0.18em] uppercase text-slate-100">
-            {/* Optional text next to logo */}
+            {/* Optional wordmark */}
           </span>
         </div>
 
@@ -76,6 +91,7 @@ export function Navbar({ navItems, services }: NavbarProps) {
           {navItems.map((item) => {
             const isActive = isItemActive(item.id);
 
+            // Special handling for Services (dropdown)
             if (item.id === "services") {
               return (
                 <li
@@ -157,7 +173,7 @@ export function Navbar({ navItems, services }: NavbarProps) {
               );
             }
 
-            const to = item.id === "home" ? "/" : `/#${item.id}`;
+            const to = getTo(item.id);
 
             return (
               <li key={item.id}>
@@ -210,6 +226,7 @@ export function Navbar({ navItems, services }: NavbarProps) {
         <div className="md:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-sm">
           <div className="mx-auto max-w-7xl px-4 py-4 space-y-2 text-sm font-medium text-slate-200">
             {navItems.map((item) => {
+              // Mobile Services dropdown
               if (item.id === "services") {
                 return (
                   <div key={item.id} className="border-b border-slate-800 pb-2">
@@ -260,7 +277,7 @@ export function Navbar({ navItems, services }: NavbarProps) {
                 );
               }
 
-              const to = item.id === "home" ? "/" : `/#${item.id}`;
+              const to = getTo(item.id);
               const isActive = isItemActive(item.id);
 
               return (

@@ -32,6 +32,9 @@ export const navItems: NavItem[] = [
   { id: "services", label: "Services" },
   { id: "about", label: "About" },
   { id: "contact", label: "Contact" },
+  { id: "blog", label: "Blog" },
+  { id: "careers", label: "Careers" },
+
 ];
 
 export const services: Service[] = [
