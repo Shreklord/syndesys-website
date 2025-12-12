@@ -1,5 +1,5 @@
-// src/pages/BlogPage.tsx
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "../libs/supabaseClient";
 
 type Post = {
@@ -11,6 +11,7 @@ type Post = {
   image_url: string | null;
   image_alt: string | null;
   created_at: string;
+  description: string | null;
 };
 
 export function BlogPage() {
@@ -73,32 +74,39 @@ export function BlogPage() {
       ) : (
         <div className="space-y-6">
           {posts.map((post) => (
-            <article
+            <Link
               key={post.id}
-              className="rounded-xl border border-slate-700 bg-slate-900/60 p-5 flex flex-col md:flex-row gap-4"
+              to={`/blog/${post.slug}`}
+              className="block rounded-xl border border-slate-700 bg-slate-900/60 p-5
+                         hover:border-cyan-400/70 hover:bg-slate-900 transition-colors"
             >
-              {post.image_url && (
-                <div className="md:w-48 flex-shrink-0">
-                  <img
-                    src={post.image_url}
-                    alt={post.image_alt || post.title}
-                    className="w-full h-32 md:h-32 object-cover rounded-lg border border-slate-700"
-                  />
-                </div>
-              )}
+              <article className="flex flex-col md:flex-row gap-4">
+                {post.image_url && (
+                  <div className="md:w-48 flex-shrink-0">
+                    <img
+                      src={post.image_url}
+                      alt={post.image_alt || post.title}
+                      className="w-full h-32 md:h-32 object-cover rounded-lg border border-slate-700"
+                    />
+                  </div>
+                )}
 
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-1">
-                  {post.title}
-                </h2>
-                <p className="text-xs text-slate-400 mb-2">
-                  {new Date(post.created_at).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-slate-200 line-clamp-3">
-                  {post.content}
-                </p>
-              </div>
-            </article>
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold mb-1">
+                    {post.title}
+                  </h2>
+                  <p className="text-xs text-slate-400 mb-2">
+                    {new Date(post.created_at).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-slate-200 line-clamp-3">
+                    {post.description || post.content}
+                  </p>
+                  <p className="mt-2 text-xs text-cyan-300">
+                    Read more →
+                  </p>
+                </div>
+              </article>
+            </Link>
           ))}
         </div>
       )}

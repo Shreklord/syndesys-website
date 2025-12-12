@@ -1,4 +1,3 @@
-// src/App.tsx
 import {
   BrowserRouter,
   Routes,
@@ -20,11 +19,13 @@ import { ServiceDetailPage } from "./pages/ServiceDetailPage";
 import { ServiceInquiryPage } from "./pages/ServiceInquiryPage";
 import { ThankYouPage } from "./pages/ThankYouPage";
 
-// ✅ New public pages
+// Public pages
 import { BlogPage } from "./pages/BlogPage";
+import { BlogPostPage } from "./pages/BlogPostPage";
 import { CareersPage } from "./pages/CareersPage";
+import { JobDetailPage } from "./pages/JobDetailPage";
 
-// 🔐 Admin imports
+// Admin
 import { AdminLoginPage } from "./pages/AdminLoginPage";
 import { AdminDashboardPage } from "./pages/AdminDashboardPage";
 import { RequireAdmin } from "./components/RequireAdmin";
@@ -33,7 +34,7 @@ function AppShell() {
   const [activeId, setActiveId] = useState<string>("home");
   const location = useLocation();
 
-  // 🔥 Set active navbar item based on route
+  // Set active navbar item based on route
   useEffect(() => {
     if (location.pathname === "/") {
       setActiveId("home");
@@ -44,13 +45,13 @@ function AppShell() {
     } else if (location.pathname.startsWith("/careers")) {
       setActiveId("careers");
     } else if (location.pathname.startsWith("/thank-you")) {
-      setActiveId(""); // nothing highlighted
+      setActiveId("");
     } else {
       setActiveId("home");
     }
   }, [location.pathname]);
 
-  // 🔥 Scroll to hash sections on home page
+  // Scroll to hash sections on home page
   useEffect(() => {
     if (location.pathname !== "/") return;
 
@@ -83,27 +84,29 @@ function AppShell() {
             path="/services"
             element={<ServicesPage services={services} />}
           />
-
           <Route
             path="/services/:slug"
             element={<ServiceDetailPage services={services} />}
           />
-
           <Route
             path="/services/:slug/inquiry"
             element={<ServiceInquiryPage services={services} />}
           />
 
-          {/* ✅ New public pages */}
+          {/* Blog */}
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
+
+          {/* Careers */}
           <Route path="/careers" element={<CareersPage />} />
+          <Route path="/careers/:id" element={<JobDetailPage />} />
 
           <Route path="/thank-you" element={<ThankYouPage />} />
 
-          {/* 🔐 Admin auth routes */}
+          {/* Admin auth */}
           <Route path="/admin/login" element={<AdminLoginPage />} />
 
-          {/* 🔐 Protected admin area */}
+          {/* Protected admin area */}
           <Route
             path="/admin"
             element={

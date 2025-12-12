@@ -1,5 +1,5 @@
-// src/pages/CareersPage.tsx
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "../libs/supabaseClient";
 
 type Job = {
@@ -11,6 +11,8 @@ type Job = {
   image_url: string | null;
   image_alt: string | null;
   created_at: string;
+  job_details: string | null;
+  payrate: string | null;
 };
 
 export function CareersPage() {
@@ -73,35 +75,47 @@ export function CareersPage() {
       ) : (
         <div className="space-y-6">
           {jobs.map((job) => (
-            <article
+            <Link
               key={job.id}
-              className="rounded-xl border border-slate-700 bg-slate-900/60 p-5 flex flex-col md:flex-row gap-4"
+              to={`/careers/${job.id}`}
+              className="block rounded-xl border border-slate-700 bg-slate-900/60 p-5
+                         hover:border-cyan-400/70 hover:bg-slate-900 transition-colors"
             >
-              {job.image_url && (
-                <div className="md:w-40 flex-shrink-0">
-                  <img
-                    src={job.image_url}
-                    alt={job.image_alt || job.title}
-                    className="w-full h-24 md:h-24 object-cover rounded-lg border border-slate-700"
-                  />
-                </div>
-              )}
+              <article className="flex flex-col md:flex-row gap-4">
+                {job.image_url && (
+                  <div className="md:w-40 flex-shrink-0">
+                    <img
+                      src={job.image_url}
+                      alt={job.image_alt || job.title}
+                      className="w-full h-24 md:h-24 object-cover rounded-lg border border-slate-700"
+                    />
+                  </div>
+                )}
 
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-1">
-                  {job.title}
-                </h2>
-                <p className="text-sm text-slate-300 mb-2">
-                  {job.location || "Location flexible"}
-                </p>
-                <p className="text-xs text-slate-400 mb-2">
-                  Posted {new Date(job.created_at).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-slate-200 whitespace-pre-line">
-                  {job.description}
-                </p>
-              </div>
-            </article>
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold mb-1">
+                    {job.title}
+                  </h2>
+                  <p className="text-sm text-slate-300 mb-1">
+                    {job.location || "Location flexible"}
+                  </p>
+                  {job.payrate && (
+                    <p className="text-xs text-slate-300 mb-1">
+                      Pay: {job.payrate}
+                    </p>
+                  )}
+                  <p className="text-xs text-slate-400 mb-2">
+                    Posted {new Date(job.created_at).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-slate-200 line-clamp-3">
+                    {job.description}
+                  </p>
+                  <p className="mt-2 text-xs text-cyan-300">
+                    View role →
+                  </p>
+                </div>
+              </article>
+            </Link>
           ))}
         </div>
       )}
