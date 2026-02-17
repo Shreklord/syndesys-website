@@ -23,11 +23,7 @@ export function ServiceDetailsSection({
             {svc.title}
           </h2>
           <p className="text-slate-300 max-w-3xl mb-4">{svc.description}</p>
-          <p className="text-slate-400 text-sm max-w-3xl">
-            Additional details about {svc.title} can go here – case studies,
-            technology stacks, engagement models, and how Syndesys supports your
-            team from strategy through implementation.
-          </p>
+          <p className="text-slate-400 text-sm max-w-3xl">{svc.about}</p>
         </section>
       ))}
     </>

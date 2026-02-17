@@ -23,22 +23,22 @@ export function Footer() {
           <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
           <ul className="space-y-2 text-sm">
             <li>
-              <a href="#home" className="hover:text-cyan-400 transition">
+              <a href="/#home" className="hover:text-cyan-400 transition">
                 Home
               </a>
             </li>
             <li>
-              <a href="#about" className="hover:text-cyan-400 transition">
+              <a href="/#about" className="hover:text-cyan-400 transition">
                 About
               </a>
             </li>
             <li>
-              <a href="#services" className="hover:text-cyan-400 transition">
+              <a href="/#services" className="hover:text-cyan-400 transition">
                 Services
               </a>
             </li>
             <li>
-              <a href="#contact" className="hover:text-cyan-400 transition">
+              <a href="/#contact" className="hover:text-cyan-400 transition">
                 Contact
               </a>
             </li>
@@ -49,12 +49,17 @@ export function Footer() {
         <div>
           <h3 className="text-lg font-semibold mb-3">Social</h3>
           <div className="flex gap-4">
+
+            {/* 🔵 UPDATED LINKEDIN */}
             <a
-              href="#"
+              href="https://www.linkedin.com/in/jason-henry-9273242/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-2 rounded-full bg-slate-800 hover:bg-cyan-600 transition flex items-center justify-center"
             >
               <FaLinkedinIn size={18} />
             </a>
+
             <a
               href="#"
               className="p-2 rounded-full bg-slate-800 hover:bg-cyan-600 transition flex items-center justify-center"
