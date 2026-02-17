@@ -34,7 +34,11 @@ export function ContactSection() {
           method="POST"
           className="space-y-5"
         >
-          <input type="hidden" name="_subject" value="New Inquiry from Syndesys Website" />
+          <input
+            type="hidden"
+            name="_subject"
+            value="New Inquiry from Syndesys Website"
+          />
           <input type="hidden" name="_template" value="box" />
           <input type="hidden" name="_captcha" value="false" />
 
@@ -94,6 +98,9 @@ export function ContactSection() {
               <option>Operations Modernization</option>
               <option>OSS/BSS Consulting</option>
               <option>Resource Management</option>
+              <option>Network Deployment</option>
+              <option>Other</option>
+              <option>None</option>
             </select>
           </div>
 

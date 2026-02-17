@@ -1,5 +1,5 @@
 // src/components/ImageDropzone.tsx
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { ChangeEvent, DragEvent } from "react";
 import { supabase } from "../libs/supabaseClient";
 
@@ -7,8 +7,8 @@ type ImageDropzoneProps = {
   label?: string;
   value: string;
   onChange: (url: string) => void;
-  bucket?: string;      // Supabase bucket name
-  folder?: string;      // folder inside the bucket
+  bucket?: string; // Supabase bucket name
+  folder?: string; // folder inside the bucket
 };
 
 export function ImageDropzone({
@@ -18,6 +18,8 @@ export function ImageDropzone({
   bucket = "public-assets",
   folder = "uploads",
 }: ImageDropzoneProps) {
+  const inputId = useId(); // ✅ unique per component instance
+
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,9 +35,12 @@ export function ImageDropzone({
     try {
       setUploading(true);
 
-      const fileExt = file.name.split(".").pop();
+      const fileExt = file.name.split(".").pop() || "png";
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
-      const filePath = `${folder}/${fileName}`;
+
+      // ✅ prevent "//" and leading/trailing slashes from creating weird paths
+      const cleanFolder = folder.replace(/^\/+|\/+$/g, "");
+      const filePath = `${cleanFolder}/${fileName}`;
 
       const { error: uploadError, data } = await supabase.storage
         .from(bucket)
@@ -84,6 +89,9 @@ export function ImageDropzone({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) uploadFile(file);
+
+    // ✅ allow selecting the same file again
+    e.currentTarget.value = "";
   };
 
   const handleRemove = () => {
@@ -114,10 +122,11 @@ export function ImageDropzone({
           type="file"
           accept="image/*"
           className="hidden"
-          id="image-upload-input"
+          id={inputId} // ✅ unique
           onChange={handleFileChange}
         />
-        <label htmlFor="image-upload-input" className="block cursor-pointer">
+
+        <label htmlFor={inputId} className="block cursor-pointer">
           <p className="font-medium">
             {value ? "Change image" : "Click to upload or drag & drop"}
           </p>

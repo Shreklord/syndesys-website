@@ -23,9 +23,7 @@ export function ServiceDetailsSection({
             {svc.title}
           </h2>
           <p className="text-slate-300 max-w-3xl mb-4">{svc.description}</p>
-          <p className="text-slate-400 text-sm max-w-3xl">
-            {svc.about}
-          </p>
+          <p className="text-slate-400 text-sm max-w-3xl">{svc.about}</p>
         </section>
       ))}
     </>
